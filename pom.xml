@@ -28,7 +28,7 @@
 						<extensions>true</extensions>
 						<configuration>
 							<cloudHubDeployment>
-								<applicationName>nh-dev-product-api</applicationName>
+								<applicationName>dev-amazonrds</applicationName>
 								<environment>DEV</environment>
 								<region>us-east-2</region>
 								<workers>1</workers>
@@ -56,7 +56,7 @@
 						<extensions>true</extensions>
 						<configuration>
 							<cloudHubDeployment>
-								<applicationName>nh-test-product-api</applicationName>
+								<applicationName>test-amazonrds</applicationName>
 								<environment>TEST</environment>
 								<region>us-east-2</region>
 								<workers>1</workers>
@@ -165,7 +165,7 @@
 		<repository>
 			<id>anypoint-exchange-v3</id>
 			<name>Anypoint Exchange</name>
-			<url>https://maven.anypoint.mulesoft.com/api/v3/organizations/ETH/maven</url>
+			<url>https://maven.anypoint.mulesoft.com/api/v2/organizations/ETH/maven</url>
 			<layout>default</layout>
 		</repository>
 		<repository>
