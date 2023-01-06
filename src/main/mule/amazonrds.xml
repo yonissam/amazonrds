@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="c0a4c269-ca61-469e-b1e8-fe4fd0401329" >
+		<db:my-sql-connection host="${secure::db.host}" port="${secure::db.port}" user="${secure::db.user}" password="${secure::db.password}" database="${secure::db.database}" />
+	</db:config>
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="5d0b9b9a-2640-4606-86d7-09170ea07461" >
+		<http:listener-connection host="0.0.0.0" port="${secure::https.port}" protocol="HTTPS">
+			<tls:context >
+				<tls:key-store type="jks" path="mule.jks" keyPassword="password" password="password" />
+			</tls:context>
+		</http:listener-connection>
+	</http:listener-config>
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="bacdd3d8-acf6-41cc-bec1-bc1630a502ac" file="${env}.yaml" key="${enc.key}" />
+	<flow name="amazonrdsFlow1" doc:id="5764d07c-7408-4373-a360-6d502e61b4bd" >
+		<http:listener doc:name="Listener" doc:id="4deed765-7dbd-435e-af38-5f209933cc40" config-ref="HTTP_Listener_config" path="/get-rds"/>
+		<db:select doc:name="Select" doc:id="6a29ed8b-5e84-4280-871e-c97007e31081" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from airports]]></db:sql>
+		</db:select>
+		<logger level="INFO" doc:name="Logger" doc:id="369a2cb3-5c40-4afd-b636-74798680f69f" message="${secure::db.password}"/>
+		<ee:transform doc:name="Transform Message" doc:id="a1814f72-1f4e-468b-a849-7d4bdb2adbb8" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

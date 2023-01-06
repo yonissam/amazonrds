@@ -1,0 +1,9 @@
+http:
+  port: "8081"
+  
+db:
+  host: "awsd2.ceogjq7zewy5.us-east-1.rds.amazonaws.com"
+  port: "3306"
+  user: "admin"
+  password: "![Kn+aT8WwoJsLE/6SSDX8xQ==]"
+  database: "mulesoft"
